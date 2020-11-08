@@ -79,18 +79,30 @@
 
 
 
-<meta name="description" content="Kafka 浅析 一、三种常见的消息队列RabbitMQErlang语言开发的，轻量级的，基于队列模式的消息队列，性能较差(相比于Kafka, RocketMQ)，不支持消息的大量堆积。 RocketMQ阿里用Java开发的，基于发布订阅模式的消息队列，性能，稳定性久经考验，但与Kafka相比，在国际上不够流行，与周边生态系统的兼容和集成要略逊一筹。 KafkaLinkedIn用Java和Scal">
+<meta name="description" content="一、三种常见的消息队列RabbitMQErlang语言开发的，轻量级的，基于队列模式的消息队列，性能较差(相比于Kafka, RocketMQ)，不支持消息的大量堆积。 RocketMQ阿里用Java开发的，基于发布订阅模式的消息队列，性能，稳定性久经考验，但与Kafka相比，在国际上不够流行，与周边生态系统的兼容和集成要略逊一筹。 KafkaLinkedIn用Java和Scala开发的，基于发布">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kafka浅析">
 <meta property="og:url" content="http://andrewpqc.github.io/2020/11/09/about-kafka/index.html">
 <meta property="og:site_name" content="Andrew&#39;s Blog">
-<meta property="og:description" content="Kafka 浅析 一、三种常见的消息队列RabbitMQErlang语言开发的，轻量级的，基于队列模式的消息队列，性能较差(相比于Kafka, RocketMQ)，不支持消息的大量堆积。 RocketMQ阿里用Java开发的，基于发布订阅模式的消息队列，性能，稳定性久经考验，但与Kafka相比，在国际上不够流行，与周边生态系统的兼容和集成要略逊一筹。 KafkaLinkedIn用Java和Scal">
+<meta property="og:description" content="一、三种常见的消息队列RabbitMQErlang语言开发的，轻量级的，基于队列模式的消息队列，性能较差(相比于Kafka, RocketMQ)，不支持消息的大量堆积。 RocketMQ阿里用Java开发的，基于发布订阅模式的消息队列，性能，稳定性久经考验，但与Kafka相比，在国际上不够流行，与周边生态系统的兼容和集成要略逊一筹。 KafkaLinkedIn用Java和Scala开发的，基于发布">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http://andrewpqc.github.io/images/kafka-queue.png">
+<meta property="og:image" content="http://andrewpqc.github.io/images/kafka-pubsub.png">
+<meta property="og:image" content="http://andrewpqc.github.io/images/kafka-basic-name-1.png">
+<meta property="og:image" content="http://andrewpqc.github.io/images/kafka-basic-name-2.png">
+<meta property="og:image" content="http://andrewpqc.github.io/images/kafka-basic-name-3.png">
+<meta property="og:image" content="http://andrewpqc.github.io/images/kafka-hw-leo.png">
+<meta property="og:image" content="http://andrewpqc.github.io/images/kafka-log-offset.png">
+<meta property="og:image" content="http://andrewpqc.github.io/images/kafka-storage-v0.png">
+<meta property="og:image" content="http://andrewpqc.github.io/images/kafka-storage-v1.png">
+<meta property="og:image" content="http://andrewpqc.github.io/images/kafka-varints.png">
+<meta property="og:image" content="http://andrewpqc.github.io/images/kafka-no-zero-copy.png">
+<meta property="og:image" content="http://andrewpqc.github.io/images/kafka-zero-copy.png">
+<meta property="og:image" content="http://andrewpqc.github.io/images/kafka-push-pull.png">
 <meta property="og:updated_time" content="2020-11-08T16:42:05.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kafka浅析">
-<meta name="twitter:description" content="Kafka 浅析 一、三种常见的消息队列RabbitMQErlang语言开发的，轻量级的，基于队列模式的消息队列，性能较差(相比于Kafka, RocketMQ)，不支持消息的大量堆积。 RocketMQ阿里用Java开发的，基于发布订阅模式的消息队列，性能，稳定性久经考验，但与Kafka相比，在国际上不够流行，与周边生态系统的兼容和集成要略逊一筹。 KafkaLinkedIn用Java和Scal">
+<meta name="twitter:description" content="一、三种常见的消息队列RabbitMQErlang语言开发的，轻量级的，基于队列模式的消息队列，性能较差(相比于Kafka, RocketMQ)，不支持消息的大量堆积。 RocketMQ阿里用Java开发的，基于发布订阅模式的消息队列，性能，稳定性久经考验，但与Kafka相比，在国际上不够流行，与周边生态系统的兼容和集成要略逊一筹。 KafkaLinkedIn用Java和Scala开发的，基于发布">
 <meta name="twitter:image" content="http://andrewpqc.github.io/images/kafka-queue.png">
 
 
@@ -341,8 +353,7 @@
       
 
       
-        <p>Kafka 浅析</p>
-<h1 id="一、三种常见的消息队列"><a href="#一、三种常见的消息队列" class="headerlink" title="一、三种常见的消息队列"></a>一、三种常见的消息队列</h1><h2 id="RabbitMQ"><a href="#RabbitMQ" class="headerlink" title="RabbitMQ"></a>RabbitMQ</h2><p>Erlang语言开发的，轻量级的，基于队列模式的消息队列，性能较差(相比于Kafka, RocketMQ)，不支持消息的大量堆积。</p>
+        <h1 id="一、三种常见的消息队列"><a href="#一、三种常见的消息队列" class="headerlink" title="一、三种常见的消息队列"></a>一、三种常见的消息队列</h1><h2 id="RabbitMQ"><a href="#RabbitMQ" class="headerlink" title="RabbitMQ"></a>RabbitMQ</h2><p>Erlang语言开发的，轻量级的，基于队列模式的消息队列，性能较差(相比于Kafka, RocketMQ)，不支持消息的大量堆积。</p>
 <h2 id="RocketMQ"><a href="#RocketMQ" class="headerlink" title="RocketMQ"></a>RocketMQ</h2><p>阿里用Java开发的，基于发布订阅模式的消息队列，性能，稳定性久经考验，但与Kafka相比，在国际上不够流行，与周边生态系统的兼容和集成要略逊一筹。</p>
 <h2 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h2><p>LinkedIn用Java和Scala开发的，基于发布订阅模式的消息队列。在国际上使用广泛，与周边生态系统具有良好的兼容性。设计上大量使用批量和异步思想，这使得Kafka有着超高的性能。<br>但是Kafka这种异步批量的设计带来的问题是，它的同步收发消息的响应延迟比较高，在Kafka的很多地方都会使用“先攒一波再一起处理”的设计。</p>
 <table>
@@ -371,21 +382,21 @@
 </tbody></table>
 <p>一般来说，RocketMQ常被用于在线业务， Kafka常被用于离线业务。</p>
 <h1 id="二、两种消息模型"><a href="#二、两种消息模型" class="headerlink" title="二、两种消息模型"></a>二、两种消息模型</h1><h2 id="队列模型"><a href="#队列模型" class="headerlink" title="队列模型"></a>队列模型</h2><p><img src="/images/kafka-queue.png" alt="aa"></p>
-<h2 id="发布订阅模型"><a href="#发布订阅模型" class="headerlink" title="发布订阅模型"></a>发布订阅模型</h2><p><img src alt></p>
+<h2 id="发布订阅模型"><a href="#发布订阅模型" class="headerlink" title="发布订阅模型"></a>发布订阅模型</h2><p><img src="/images/kafka-pubsub.png" alt></p>
 <p>上面两种模型的区别: 一份数据能不能被多次消费。</p>
-<h1 id="三、基本概念"><a href="#三、基本概念" class="headerlink" title="三、基本概念"></a>三、基本概念</h1><p><img src alt></p>
+<h1 id="三、基本概念"><a href="#三、基本概念" class="headerlink" title="三、基本概念"></a>三、基本概念</h1><p><img src="/images/kafka-basic-name-1.png" alt></p>
 <h2 id="Producer"><a href="#Producer" class="headerlink" title="Producer"></a>Producer</h2><p>消息生产者, 负责将消息发送到Broker。</p>
 <h2 id="Consumer"><a href="#Consumer" class="headerlink" title="Consumer"></a>Consumer</h2><p>消息消费者，负责实际消费消息。</p>
 <h2 id="Consumer-Group"><a href="#Consumer-Group" class="headerlink" title="Consumer Group"></a>Consumer Group</h2><p>一个Consumer Group对应一份订阅，它需要消费一个Topic下所有Partition内的全部消息。Topic内的每一条消息会被广播给所有订阅了该Topic的Consumer Group, 但是一个Consumer Group中只有一个Consumer可以消费该消息。</p>
 <h2 id="Broker"><a href="#Broker" class="headerlink" title="Broker"></a>Broker</h2><p>Kafka server, 充当生产者与消费者之间的一个中介，负责存储和处理消息。</p>
-<p><img src alt></p>
+<p><img src="/images/kafka-basic-name-2.png" alt></p>
 <h2 id="Topic"><a href="#Topic" class="headerlink" title="Topic"></a>Topic</h2><p>逻辑上的一个概念，没有对应的物理存在。可以理解为对消息的一个归类，生产者生产消息和消费者消费消息都需要指定Topic。</p>
 <h2 id="Partition"><a href="#Partition" class="headerlink" title="Partition"></a>Partition</h2><p>与Topic一样，Partition也是一个逻辑概念，没有对应的物理存在。一个Topic下可以有多个Partition，出于负载均衡的考虑，同一个 Topic 的 多个Partition 会相对均匀的分布在 Kafka 集群的多个 Broker 上。</p>
 <p>生产者发送到Topic的消息会按照分区规则发送到具体的某一个Partition内，一个Partition内的消息是严格有序的，即先到达Partition的消息一定比后到达的消息先消费。</p>
 <p>由于消息确认机制的限制，一个Partition内的消息只会给消费组内的一个特定Consumer实例消费，如果消费组内的Consumer数量多于Topic下Partition的数量，那么多出来的Consumer将分配不到Partition，从而消费不到任何消息。</p>
 <h2 id="Partition-Replicas"><a href="#Partition-Replicas" class="headerlink" title="Partition Replicas"></a>Partition Replicas</h2><p>为了提升Partition的可用性，Kafka还设计了Partition Replicas(分区副本)。一个Partition包含了多个Partition Replicas，在任意一个时刻，只有一个Partition Replica(Leader)对外提供读写功能，其他的Partition Replica(Follower)只负责从Leader同步数据，当Leader宕机后，就会选择一个Follower成为新的Leader。一个Partition的多个Partition Replicas会相对均匀的分布在Kafka的多个Broker上。</p>
 <h2 id="Log"><a href="#Log" class="headerlink" title="Log"></a>Log</h2><p>一个分区副本对应一个Log(日志)， Log在物理上对应一个文件夹，Log中存储了当前分区副本中的消息以及索引等数据。</p>
-<h2 id="Log-Segment"><a href="#Log-Segment" class="headerlink" title="Log Segment"></a>Log Segment</h2><p>为了防止Log过大，Kafka又引入了Log Segment(日志分段)的概念，将一个巨型文件平均分割成多个相对较小的文件，便于消息的清理和维护。每个Log Segment对应一个日志文件和两个索引文件，以及其他的可能文件。<br><img src alt></p>
+<h2 id="Log-Segment"><a href="#Log-Segment" class="headerlink" title="Log Segment"></a>Log Segment</h2><p>为了防止Log过大，Kafka又引入了Log Segment(日志分段)的概念，将一个巨型文件平均分割成多个相对较小的文件，便于消息的清理和维护。每个Log Segment对应一个日志文件和两个索引文件，以及其他的可能文件。<br><img src="/images/kafka-basic-name-3.png" alt></p>
 <h1 id="四、分区副本同步细节"><a href="#四、分区副本同步细节" class="headerlink" title="四、分区副本同步细节"></a>四、分区副本同步细节</h1><h2 id="AR-ISR-OSR"><a href="#AR-ISR-OSR" class="headerlink" title="AR/ISR/OSR"></a>AR/ISR/OSR</h2><p><code>AR(Assigned Replicas)</code>: 一个分区的所有副本。</p>
 <p><code>ISR(In-Sync Replicas)</code>: 与Leader 副本保持一定程度同步的副本(包括Leader副本本身)</p>
 <p><code>OSR(Out-of-Sync Replicas)</code>:与Leader副本同步滞后过多的副本。</p>
@@ -395,41 +406,48 @@
 <p>request.required.acks = 1， 1为默认配置。表明消息只要成功写入Leader副本就算发送成功。考虑这样一个场景: 当消息成功写入Leader副本，没来得及同步到其他的Follower副本时Broker崩溃，这样消息就丢失了。</p>
 <p>request.required.acks = 0，表明生产者不需要任何等待，只要消息发送出去就表明成功。0的配置下，如果消息从发送到写入，出现了任何的问题，那么消息都会丢失。0的配置下，可以达到最大的吞吐量。</p>
 <p>request.required.acks = -1 (all)，表明生产者发送消息后，需要等待消息成功写入到所有的ISR列表中的分区副本，才算写入成功。该配置下，消息的吞吐量是最小的，但可靠性也是最高的。</p>
-<h2 id="HW控制消息可见性"><a href="#HW控制消息可见性" class="headerlink" title="HW控制消息可见性"></a>HW控制消息可见性</h2><p>每一个分区副本都顺序记录了所有的消息，每一条消息都有一个Offset来标记他在Log中的位置。Log序列中有两个特殊的标记HW, LEO.<br><img src alt></p>
+<h2 id="HW控制消息可见性"><a href="#HW控制消息可见性" class="headerlink" title="HW控制消息可见性"></a>HW控制消息可见性</h2><p>每一个分区副本都顺序记录了所有的消息，每一条消息都有一个Offset来标记他在Log中的位置。Log序列中有两个特殊的标记HW, LEO.<br><img src="/images/kafka-hw-leo.png" alt></p>
 <p><code>LEO(Log End Offset)</code>：当前日志文件中，下一条待写入的日志的offset。</p>
-<p><code>HW(High Watermark)</code>: 俗称高水位，它标识了一个特定的消息偏移量，消费者只能拉取到HW之前的消息。HW等于ISR列表中所有的分区副本的最小的LEO值。</p>
+<p><code>HW(High Watermark)</code>: 俗称高水位，它标识了一个特定的消息偏移量，消费者只能拉取到HW之前的消息。HW等于ISR列表中所有的分区副本的最小的LEO值。<br><img src="/images/kafka-log-offset.png" alt></p>
 <h1 id="五、Kafka日志存储细节"><a href="#五、Kafka日志存储细节" class="headerlink" title="五、Kafka日志存储细节"></a>五、Kafka日志存储细节</h1><p>三种版本的消息格式</p>
-<h2 id="V0"><a href="#V0" class="headerlink" title="V0"></a>V0</h2><p>offset: 消息在分区中的偏移量，是一个逻辑值，而非实际的物理值。<br>message size: 表明消息的大小。<br>offset和message size一起被称为日志头部(LOG_OVERHEAD)</p>
-<p>crc32: crc32检验和，校验范围为magic至value之间。<br>magic：消息格式版本号，在V0版本中该值为0.<br>attributes: 消息的属性, 总共一个字节，低三位表示压缩类型，其余位保留。0:None, 1:GZIP, 2:SNAPPY, 3: LZ4<br>key length: key的长度前缀，若为-1表明，没有设置key<br>key: key的实际值，可选<br>value length: value的长度前缀<br>value: 消息实际值</p>
-<p>crc32+magic+ attributes+ key length+key+ value length+value整体被称为RECORD.</p>
-<h2 id="V1"><a href="#V1" class="headerlink" title="V1"></a>V1</h2><p>V1版本的消息格式与V0版本的消息格式大体相同。不同点在于V1版本在magic和attributes之间增加了一个8字节的timestamp字段，并且attributes的第四个Bit也别利用了起来，用来表明存储的时间戳类型。0: CreateTime, 1:LogAppendTime</p>
+<h2 id="V0"><a href="#V0" class="headerlink" title="V0"></a>V0</h2><p><img src="/images/kafka-storage-v0.png" alt></p>
+<p><code>offset</code>: 消息在分区中的偏移量，是一个逻辑值，而非实际的物理值。</p>
+<p><code>message size</code>: 表明消息的大小。<br><code>offset</code>和<code>message size</code>一起被称为日志头部(<code>LOG_OVERHEAD</code>)</p>
+<p><code>crc32</code>: crc32检验和，校验范围为magic至value之间。<br><code>magic</code>：消息格式版本号，在V0版本中该值为0.<br><code>attributes</code>: 消息的属性, 总共一个字节，低三位表示压缩类型，其余位保留。0:None, 1:GZIP, 2:SNAPPY, 3: LZ4<br><code>key length</code>: key的长度前缀，若为-1表明，没有设置key<br><code>key</code>: key的实际值，可选<br><code>value length</code>: value的长度前缀<br><code>value</code>: 消息实际值</p>
+<p>crc32+magic+ attributes+ key length+key+ value length+value整体被称为<code>RECORD</code>.</p>
+<h2 id="V1"><a href="#V1" class="headerlink" title="V1"></a>V1</h2><p><img src="/images/kafka-storage-v1.png" alt></p>
+<p>V1版本的消息格式与V0版本的消息格式大体相同。不同点在于V1版本在magic和attributes之间增加了一个8字节的timestamp字段，并且attributes的第四个Bit也别利用了起来，用来表明存储的时间戳类型。0: CreateTime, 1:LogAppendTime</p>
 <h2 id="V2"><a href="#V2" class="headerlink" title="V2"></a>V2</h2><p>V2版本的消息格式对比V0和V1版本的消息格式改动很大，并且还参考了Protocol Buffer而引入了变长整数(Varints) 和ZigZag编码, 这里简单介绍下Varints和ZigZag.</p>
-<h3 id="VarInts"><a href="#VarInts" class="headerlink" title="VarInts"></a>VarInts</h3><p>对于一个整形数字，一般使用 4 个字节来表示一个整数值。但是经过研究发现，消息传递中大部分使用的整数值都是很小的非负整数，如果全部使用 4 个字节来表示一个整数会很浪费。比如数字1用四字节表示就是这样:<br>00000000 00000000 00000000 00000001<br>对较小整数来说，这种固定字节数编码很浪费bit。所以人们就发明了一个类型叫变长整数varint。数值非常小时，只需要使用一个字节来存储，数值稍微大一点可以使用 2 个字节，再大一点就是 3 个字节，它还可以超过 4 个字节用来表达长整形数字。</p>
+<h3 id="VarInts"><a href="#VarInts" class="headerlink" title="VarInts"></a>VarInts</h3><p>对于一个整形数字，一般使用 4 个字节来表示一个整数值。但是经过研究发现，消息传递中大部分使用的整数值都是很小的非负整数，如果全部使用 4 个字节来表示一个整数会很浪费。比如数字1用四字节表示就是这样:<br><code>00000000 00000000 00000000 00000001</code><br>对较小整数来说，这种固定字节数编码很浪费bit。所以人们就发明了一个类型叫变长整数varint。数值非常小时，只需要使用一个字节来存储，数值稍微大一点可以使用 2 个字节，再大一点就是 3 个字节，它还可以超过 4 个字节用来表达长整形数字。</p>
 <p>其原理也很简单，就是保留每个字节的最高位的bit来标识后一个字节是否属于该数字，1表示属于，0表示不属于。</p>
-<p>示意图如下:<br>|<br>由于大多数时候使用的是较小的整数，所以总体上来说，Varint编码的方式可以有效的压缩多字节整数。</p>
+<p>示意图如下:<br><img src="/images/kafka-varints.png" alt><br>由于大多数时候使用的是较小的整数，所以总体上来说，Varint编码的方式可以有效的压缩多字节整数。</p>
 <p>那么对于负数怎么办呢?大家知道负数在计算机中是以补码的形式存在的。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">10000000 00000000 00000000 00000001  // -1的原码</span><br><span class="line">11111111 11111111 11111111 11111110  // -1的反码</span><br><span class="line">11111111 11111111 11111111 11111111  // -1的补码</span><br></pre></td></tr></table></figure>
 
-<p>所以-1在计算机中就是<code>11111111 11111111 11111111 11111111</code> ,如果按照Varint编码，那么需要6个字节才能存的下，但是在现实生活中，-1却是个常用的整数。越大的负数越常见，编码需要的字节数越大，这显然是不能容忍的。为了解决这个问题, 就要使用ZigZag编码压缩技术了。<br>消息的</p>
-<h2 id="ZigZag"><a href="#ZigZag" class="headerlink" title="ZigZag"></a>ZigZag</h2><p>zigzag 编码专门用来解决负数编码问题。zigzag 编码将整数范围一一映射到自然数范围，然后再进行 varint 编码。</p>
+<p>所以-1在计算机中就是<code>11111111 11111111 11111111 11111111</code> ,如果按照Varint编码，那么需要6个字节才能存的下，但是在现实生活中，-1却是个常用的整数。越大的负数越常见，编码需要的字节数越大，这显然是不能容忍的。为了解决这个问题, 就要使用ZigZag编码压缩技术了。</p>
+<h3 id="ZigZag"><a href="#ZigZag" class="headerlink" title="ZigZag"></a>ZigZag</h3><p>zigzag 编码专门用来解决负数编码问题。zigzag 编码将整数范围一一映射到自然数范围，然后再进行 varint 编码。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">0 =&gt; 0</span><br><span class="line">-1 =&gt; 1</span><br><span class="line">1 =&gt; 2</span><br><span class="line">-2 =&gt; 3</span><br><span class="line">2 =&gt; 4</span><br><span class="line">-3 =&gt; 5</span><br><span class="line">3 =&gt; 6</span><br></pre></td></tr></table></figure>
 
 <p>zigzag 将负数编码成正奇数，正数编码成偶数。解码的时候遇到偶数直接除 2 就是原值，遇到奇数就加 1 除 2 再取负就是原值。</p>
 <h1 id="六、Kafka如何实现高性能"><a href="#六、Kafka如何实现高性能" class="headerlink" title="六、Kafka如何实现高性能"></a>六、Kafka如何实现高性能</h1><h2 id="1-批量异步处理"><a href="#1-批量异步处理" class="headerlink" title="1. 批量异步处理"></a>1. 批量异步处理</h2><p>在Kafka的设计中大量采用“攒一波再一起处理”的思路，在有大量频繁消息需要处理的系统中，这种思想可以极大的减少网络IO的次数，从而提高吞吐量，提升性能。</p>
-<h2 id="2-线性（顺序）写"><a href="#2-线性（顺序）写" class="headerlink" title="2. 线性（顺序）写"></a>2. 线性（顺序）写</h2><p>Kafka的模型天然的就是顺序写，顺序写磁盘和随机写内存的性能相当。<br>有关测试表明，一个由 6 块 7200 rpm 的 RAID-5 阵列组成的磁盘簇线性（顺序）写入速度可以达到 600MB/s，而随机写入速度只有 100KB/s，两者性能相差6000倍。操作系统可以针对线性写做深层次的优化。<br>涉及到数据持久化的存储系统一般都会利用顺序写来提升性能，如MySQL的redo log</p>
+<h2 id="2-线性（顺序）写"><a href="#2-线性（顺序）写" class="headerlink" title="2. 线性（顺序）写"></a>2. 线性（顺序）写</h2><p>Kafka的模型天然的就是顺序写，顺序写磁盘和随机写内存的性能相当。</p>
+<p>有关测试表明，一个由 6 块 7200 rpm 的 RAID-5 阵列组成的磁盘簇线性（顺序）写入速度可以达到 600MB/s，而随机写入速度只有 100KB/s，两者性能相差6000倍。操作系统可以针对线性写做深层次的优化。</p>
+<p>涉及到数据持久化的存储系统一般都会利用顺序写来提升性能，如MySQL的redo log</p>
 <h2 id="3-页缓存（PageCache）"><a href="#3-页缓存（PageCache）" class="headerlink" title="3. 页缓存（PageCache）"></a>3. 页缓存（PageCache）</h2><p>虚拟内存是现代操作系统非常重要的一个机制，它将物理内存中的页帧当做磁盘上的页的缓存，页和页帧的对应关系由存在于物理内存中的页表维护，页帧中的内容会在程序的执行过程中按需换入换出。</p>
-<h2 id="4-零拷贝（Zero-Copy）"><a href="#4-零拷贝（Zero-Copy）" class="headerlink" title="4. 零拷贝（Zero-Copy）"></a>4. 零拷贝（Zero-Copy）</h2><p>ssize_t sendfile(int out_fd, int in_fd, off_t *offset, size_t count)<br>系统调用 sendfile() 通过 DMA 把硬盘数据拷贝到 kernel buffer，然后数据被 kernel 直接拷贝到另外一个与 socket 相关的 kernel buffer。这里没有 用户态和核心态 之间的切换，在内核中直接完成了从一个 buffer 到另一个 buffer 的拷贝。</p>
-<p>如果不使用Zero Copy:</p>
-<p>使用Zero Copy:</p>
+<h2 id="4-零拷贝（Zero-Copy）"><a href="#4-零拷贝（Zero-Copy）" class="headerlink" title="4. 零拷贝（Zero-Copy）"></a>4. 零拷贝（Zero-Copy）</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ssize_t</span> sendfile(<span class="keyword">int</span> out_fd, <span class="keyword">int</span> in_fd, <span class="keyword">off_t</span> *offset, <span class="keyword">size_t</span> count)</span><br></pre></td></tr></table></figure>
+
+<p>系统调用 <code>sendfile()</code> 通过 DMA 把硬盘数据拷贝到 kernel buffer，然后数据被 kernel 直接拷贝到另外一个与 socket 相关的 kernel buffer。这里没有 用户态和核心态 之间的切换，在内核中直接完成了从一个 buffer 到另一个 buffer 的拷贝。</p>
+<p>如果不使用Zero Copy:<br><img src="/images/kafka-no-zero-copy.png" alt></p>
+<p>使用Zero Copy:<br><img src="/images/kafka-zero-copy.png" alt></p>
 <h1 id="七、常见问题探讨"><a href="#七、常见问题探讨" class="headerlink" title="七、常见问题探讨"></a>七、常见问题探讨</h1><h2 id="如何保证不丢消息？"><a href="#如何保证不丢消息？" class="headerlink" title="如何保证不丢消息？"></a>如何保证不丢消息？</h2><ol>
 <li><p>在生产阶段，需要捕获消息发送的错误，并重发消息。</p>
 </li>
 <li><p>在存储阶段，通过配置刷盘和复制相关的参数，让消息写入到多个副本的磁盘上，来确保消息不会因为某个 Broker 宕机或者磁盘损坏而丢失。</p>
 </li>
 <li><p>在消费阶段，需要禁用自动提交offset，在处理完全部消费业务逻辑之后，再发送消费确认。</p>
-<h2 id="如何保证消息有序？"><a href="#如何保证消息有序？" class="headerlink" title="如何保证消息有序？"></a>如何保证消息有序？</h2><p>消息有序的概念: 先到达的Broker的消息一定比后到达的消息先消费。</p>
 </li>
 </ol>
+<h2 id="如何保证消息有序？"><a href="#如何保证消息有序？" class="headerlink" title="如何保证消息有序？"></a>如何保证消息有序？</h2><p>消息有序的概念: 先到达的Broker的消息一定比后到达的消息先消费。</p>
 <p>Kafka只能保证Partition内消息的有序，如果需要全局严格有序，必须采用单Producer，单Partition的Topic，单Consumer的架构。</p>
 <p>实际业务中，一般不会要求全局有序，都是某个业务对象的消息有序即可满足要求。这种时候只需要将同一个业务对象相关的消息发送到同一个partition即可。比如使用消息队列分发MySQL binlog的场景,只需要将同一个表同一条记录的所有消息发送到同一个Partition (取模或者一致性Hash)就可以保证在大部分情况下的有序。</p>
 <h2 id="如何处理消息重复？"><a href="#如何处理消息重复？" class="headerlink" title="如何处理消息重复？"></a>如何处理消息重复？</h2><p>现在消息系统一般提供at lease once的消费保证，消息有可能重复，这就需要消费端实现幂等消费</p>
@@ -447,7 +465,7 @@
 <li><p>扩容Partition数量和消费者实例的数量，扩充消费者线程数，增大消费速度</p>
 </li>
 </ol>
-<h2 id="是推还是拉？"><a href="#是推还是拉？" class="headerlink" title="是推还是拉？"></a>是推还是拉？</h2><p>拉，Kafka Consumer采用长轮询的方式去Broker端拉取消息，如果Broker端有消息就直接返回，如果没有消息则等待指定时间，如果等待过程中消息来了，则带着消息返回，否则超时，未拉取到消息。</p>
+<h2 id="是推还是拉？"><a href="#是推还是拉？" class="headerlink" title="是推还是拉？"></a>是推还是拉？</h2><p>拉，Kafka Consumer采用长轮询的方式去Broker端拉取消息，如果Broker端有消息就直接返回，如果没有消息则等待指定时间，如果等待过程中消息来了，则带着消息返回，否则超时，未拉取到消息。<br><img src="/images/kafka-push-pull.png" alt></p>
 
       
     </div>
@@ -641,7 +659,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、三种常见的消息队列"><span class="nav-number">1.</span> <span class="nav-text">一、三种常见的消息队列</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#RabbitMQ"><span class="nav-number">1.1.</span> <span class="nav-text">RabbitMQ</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RocketMQ"><span class="nav-number">1.2.</span> <span class="nav-text">RocketMQ</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kafka"><span class="nav-number">1.3.</span> <span class="nav-text">Kafka</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、两种消息模型"><span class="nav-number">2.</span> <span class="nav-text">二、两种消息模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#队列模型"><span class="nav-number">2.1.</span> <span class="nav-text">队列模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发布订阅模型"><span class="nav-number">2.2.</span> <span class="nav-text">发布订阅模型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、基本概念"><span class="nav-number">3.</span> <span class="nav-text">三、基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Producer"><span class="nav-number">3.1.</span> <span class="nav-text">Producer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Consumer"><span class="nav-number">3.2.</span> <span class="nav-text">Consumer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Consumer-Group"><span class="nav-number">3.3.</span> <span class="nav-text">Consumer Group</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Broker"><span class="nav-number">3.4.</span> <span class="nav-text">Broker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Topic"><span class="nav-number">3.5.</span> <span class="nav-text">Topic</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Partition"><span class="nav-number">3.6.</span> <span class="nav-text">Partition</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Partition-Replicas"><span class="nav-number">3.7.</span> <span class="nav-text">Partition Replicas</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Log"><span class="nav-number">3.8.</span> <span class="nav-text">Log</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Log-Segment"><span class="nav-number">3.9.</span> <span class="nav-text">Log Segment</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四、分区副本同步细节"><span class="nav-number">4.</span> <span class="nav-text">四、分区副本同步细节</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#AR-ISR-OSR"><span class="nav-number">4.1.</span> <span class="nav-text">AR/ISR/OSR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#acks-性能和可靠性的考虑"><span class="nav-number">4.2.</span> <span class="nav-text">acks 性能和可靠性的考虑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HW控制消息可见性"><span class="nav-number">4.3.</span> <span class="nav-text">HW控制消息可见性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#五、Kafka日志存储细节"><span class="nav-number">5.</span> <span class="nav-text">五、Kafka日志存储细节</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#V0"><span class="nav-number">5.1.</span> <span class="nav-text">V0</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#V1"><span class="nav-number">5.2.</span> <span class="nav-text">V1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#V2"><span class="nav-number">5.3.</span> <span class="nav-text">V2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#VarInts"><span class="nav-number">5.3.1.</span> <span class="nav-text">VarInts</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZigZag"><span class="nav-number">5.4.</span> <span class="nav-text">ZigZag</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#六、Kafka如何实现高性能"><span class="nav-number">6.</span> <span class="nav-text">六、Kafka如何实现高性能</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-批量异步处理"><span class="nav-number">6.1.</span> <span class="nav-text">1. 批量异步处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-线性（顺序）写"><span class="nav-number">6.2.</span> <span class="nav-text">2. 线性（顺序）写</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-页缓存（PageCache）"><span class="nav-number">6.3.</span> <span class="nav-text">3. 页缓存（PageCache）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-零拷贝（Zero-Copy）"><span class="nav-number">6.4.</span> <span class="nav-text">4. 零拷贝（Zero-Copy）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#七、常见问题探讨"><span class="nav-number">7.</span> <span class="nav-text">七、常见问题探讨</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何保证不丢消息？"><span class="nav-number">7.1.</span> <span class="nav-text">如何保证不丢消息？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何保证消息有序？"><span class="nav-number">7.2.</span> <span class="nav-text">如何保证消息有序？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何处理消息重复？"><span class="nav-number">7.3.</span> <span class="nav-text">如何处理消息重复？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#消息堆积怎么办？"><span class="nav-number">7.4.</span> <span class="nav-text">消息堆积怎么办？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#是推还是拉？"><span class="nav-number">7.5.</span> <span class="nav-text">是推还是拉？</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、三种常见的消息队列"><span class="nav-number">1.</span> <span class="nav-text">一、三种常见的消息队列</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#RabbitMQ"><span class="nav-number">1.1.</span> <span class="nav-text">RabbitMQ</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RocketMQ"><span class="nav-number">1.2.</span> <span class="nav-text">RocketMQ</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kafka"><span class="nav-number">1.3.</span> <span class="nav-text">Kafka</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、两种消息模型"><span class="nav-number">2.</span> <span class="nav-text">二、两种消息模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#队列模型"><span class="nav-number">2.1.</span> <span class="nav-text">队列模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发布订阅模型"><span class="nav-number">2.2.</span> <span class="nav-text">发布订阅模型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、基本概念"><span class="nav-number">3.</span> <span class="nav-text">三、基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Producer"><span class="nav-number">3.1.</span> <span class="nav-text">Producer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Consumer"><span class="nav-number">3.2.</span> <span class="nav-text">Consumer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Consumer-Group"><span class="nav-number">3.3.</span> <span class="nav-text">Consumer Group</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Broker"><span class="nav-number">3.4.</span> <span class="nav-text">Broker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Topic"><span class="nav-number">3.5.</span> <span class="nav-text">Topic</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Partition"><span class="nav-number">3.6.</span> <span class="nav-text">Partition</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Partition-Replicas"><span class="nav-number">3.7.</span> <span class="nav-text">Partition Replicas</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Log"><span class="nav-number">3.8.</span> <span class="nav-text">Log</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Log-Segment"><span class="nav-number">3.9.</span> <span class="nav-text">Log Segment</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四、分区副本同步细节"><span class="nav-number">4.</span> <span class="nav-text">四、分区副本同步细节</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#AR-ISR-OSR"><span class="nav-number">4.1.</span> <span class="nav-text">AR/ISR/OSR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#acks-性能和可靠性的考虑"><span class="nav-number">4.2.</span> <span class="nav-text">acks 性能和可靠性的考虑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HW控制消息可见性"><span class="nav-number">4.3.</span> <span class="nav-text">HW控制消息可见性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#五、Kafka日志存储细节"><span class="nav-number">5.</span> <span class="nav-text">五、Kafka日志存储细节</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#V0"><span class="nav-number">5.1.</span> <span class="nav-text">V0</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#V1"><span class="nav-number">5.2.</span> <span class="nav-text">V1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#V2"><span class="nav-number">5.3.</span> <span class="nav-text">V2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#VarInts"><span class="nav-number">5.3.1.</span> <span class="nav-text">VarInts</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ZigZag"><span class="nav-number">5.3.2.</span> <span class="nav-text">ZigZag</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#六、Kafka如何实现高性能"><span class="nav-number">6.</span> <span class="nav-text">六、Kafka如何实现高性能</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-批量异步处理"><span class="nav-number">6.1.</span> <span class="nav-text">1. 批量异步处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-线性（顺序）写"><span class="nav-number">6.2.</span> <span class="nav-text">2. 线性（顺序）写</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-页缓存（PageCache）"><span class="nav-number">6.3.</span> <span class="nav-text">3. 页缓存（PageCache）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-零拷贝（Zero-Copy）"><span class="nav-number">6.4.</span> <span class="nav-text">4. 零拷贝（Zero-Copy）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#七、常见问题探讨"><span class="nav-number">7.</span> <span class="nav-text">七、常见问题探讨</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何保证不丢消息？"><span class="nav-number">7.1.</span> <span class="nav-text">如何保证不丢消息？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何保证消息有序？"><span class="nav-number">7.2.</span> <span class="nav-text">如何保证消息有序？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何处理消息重复？"><span class="nav-number">7.3.</span> <span class="nav-text">如何处理消息重复？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#消息堆积怎么办？"><span class="nav-number">7.4.</span> <span class="nav-text">消息堆积怎么办？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#是推还是拉？"><span class="nav-number">7.5.</span> <span class="nav-text">是推还是拉？</span></a></li></ol></li></ol></div>
             
 
           </div>
